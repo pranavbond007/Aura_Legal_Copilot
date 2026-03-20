@@ -59,7 +59,7 @@ export default function CaseDetail({ params }) {
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Left Column: Case Details */}
+        {/* Left Column: Case Details
         <div className="lg:col-span-1 space-y-6">
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
             <h2 className="text-slate-400 text-sm uppercase tracking-widest mb-2 font-bold">Client Brief</h2>
@@ -70,6 +70,52 @@ export default function CaseDetail({ params }) {
               <p className="text-slate-500 text-sm">Status: <span className="text-yellow-500">{caseData.status}</span></p>
             </div>
           </div>
+        // </div> */}
+
+        {/* Left Column: Case Details & Evidence */}
+        <div className="lg:col-span-1 space-y-6">
+          
+          {/* 1. The Original Client Brief */}
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+            <h2 className="text-slate-400 text-sm uppercase tracking-widest mb-2 font-bold">Client Brief</h2>
+            <h3 className="text-2xl font-bold text-white mb-4">{caseData.title}</h3>
+            <p className="text-slate-300 leading-relaxed mb-6">{caseData.description}</p>
+            
+            <div className="pt-4 border-t border-slate-800">
+              <p className="text-slate-500 text-sm">Status: <span className="text-yellow-500">{caseData.status}</span></p>
+            </div>
+          </div>
+
+          {/* 2. THE NEW Smart Evidence Vault (Goes right below the brief!) */}
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-blue-500/10 text-blue-400 px-3 py-1 rounded-bl-lg font-bold text-[10px] uppercase tracking-widest border-b border-l border-blue-500/30">
+              AI Vision Scanned
+            </div>
+            <h2 className="text-slate-400 text-sm uppercase tracking-widest mb-4 font-bold flex items-center gap-2">
+              📎 Smart Evidence Vault
+            </h2>
+            
+            <div className="space-y-4">
+              {/* Mock Uploaded Document */}
+              <div className="border border-slate-700 bg-slate-950 rounded-lg p-4 group hover:border-blue-500 transition cursor-pointer">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-slate-800 p-2 rounded text-slate-300 text-xl">📄</div>
+                    <div>
+                      <p className="text-white text-sm font-bold group-hover:text-blue-400 transition">eviction_notice_photo.jpg</p>
+                      <p className="text-slate-500 text-xs mt-1">Uploaded 2 hours ago</p>
+                    </div>
+                  </div>
+                </div>
+                {/* AI Extraction Summary */}
+                <div className="bg-blue-900/20 border border-blue-800/50 rounded p-3 mt-2">
+                  <p className="text-blue-300 text-[10px] font-mono mb-1 uppercase tracking-wider">Extracted Data:</p>
+                  <p className="text-slate-300 text-xs italic">"Notice to vacate premises within 72 hours. Signed by Property Manager."</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         {/* Right Column: Exa Research Engine */}
