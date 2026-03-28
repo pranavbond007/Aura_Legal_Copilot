@@ -115,7 +115,7 @@ export default function LandingPage() {
             href="/citizen-dashboard" 
             className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 px-10 py-4 rounded-xl font-bold text-lg shadow-[0_0_40px_rgba(245,158,11,0.3)] hover:shadow-[0_0_60px_rgba(245,158,11,0.5)] transition-all hover:-translate-y-1"
           >
-            Create Citizen Account
+            Citizen Portal
             <span className="text-xl leading-none">→</span>
           </Link>
           
@@ -123,7 +123,7 @@ export default function LandingPage() {
             href="/lawyer-dashboard" 
             className="w-full sm:w-auto flex items-center justify-center gap-2 bg-stone-900/80 hover:bg-stone-800 backdrop-blur-md border border-white/10 text-white px-10 py-4 rounded-xl font-bold text-lg transition-all hover:-translate-y-1"
           >
-            Authorized Official Login
+            Lawyer Portal
             <span className="text-xl leading-none">→</span>
           </Link>
         </div>

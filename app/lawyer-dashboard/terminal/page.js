@@ -1,190 +1,343 @@
-'use client';
-import React, { useState } from 'react';
-import { Upload, Send, Download, FileText, MessageSquare, Scale } from 'lucide-react';
 
-export default function LawyerTerminalPage() {
+// "use client";
+
+// import { useState } from 'react';
+// import Link from 'next/link';
+// import { Search, Scale, BookmarkPlus, BookmarkCheck, Database } from 'lucide-react';
+// import { useQuery, useMutation } from "convex/react";
+// import { api } from "../../../convex/_generated/api"; // Adjust path if needed
+
+// export default function LawyerTerminal() {
+//   const [input, setInput] = useState('');
+//   const [messages, setMessages] = useState([
+//     { role: 'ai', content: 'Aura Neural Search Online. Enter a legal query to scrape Indian case law precedents.' }
+//   ]);
+//   const [isSearching, setIsSearching] = useState(false);
+
+//   // 💥 CONVEX REAL-TIME HOOKS
+//   const pinnedCases = useQuery(api.precedents.getPinned, { lawyerId: "Lawyer_001" });
+//   const pinCaseMutation = useMutation(api.precedents.pinCase);
+//   const [justPinned, setJustPinned] = useState(null); // Animation state
+
+//   const handleSendMessage = async (e) => {
+//     e.preventDefault();
+//     if (!input.trim()) return;
+
+//     const currentQuery = input; 
+//     setMessages(prev => [...prev, { role: 'user', content: currentQuery }]);
+//     setInput('');
+//     setIsSearching(true);
+
+//     try {
+//       // Calls your Exa + Gemini Backend
+//       const response = await fetch('/api/lawyer-search', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ message: currentQuery }),
+//       });
+
+//       const data = await response.json();
+//       setMessages(prev => [...prev, { role: 'ai', content: data.content, precedents: data.precedents }]);
+//     } catch (error) {
+//       setMessages(prev => [...prev, { role: 'ai', content: "Neural search failed. Please verify API connections." }]);
+//     } finally {
+//       setIsSearching(false);
+//     }
+//   };
+
+//   const handlePin = async (prec) => {
+//     setJustPinned(prec.title);
+//     await pinCaseMutation({
+//       lawyerId: "Lawyer_001",
+//       caseTitle: prec.title,
+//       relevance: prec.relevance || "High",
+//       code: prec.code || "Legal Precedent",
+//       datePinned: Date.now(),
+//     });
+//     setTimeout(() => setJustPinned(null), 2000);
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-stone-950 text-stone-300 p-6 flex gap-6 font-sans">
+      
+//       {/* LEFT SIDE: Exa Neural Search Terminal */}
+//       <div className="flex-1 flex flex-col bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden shadow-2xl">
+//         <div className="p-4 border-b border-stone-800 bg-stone-950 flex items-center justify-between">
+//           <h2 className="font-bold text-amber-500 tracking-widest uppercase text-sm flex items-center gap-2">
+//             <Search className="w-4 h-4" /> Neural Precedent Search
+//           </h2>
+//           <Link href="/lawyer-dashboard" className="text-xs text-stone-500 hover:text-amber-500">Exit Terminal</Link>
+//         </div>
+
+//         <div className="flex-1 overflow-y-auto p-6 space-y-6">
+//           {messages.map((msg, idx) => (
+//             <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+//               <div className={`max-w-[85%] p-4 rounded-xl text-sm ${msg.role === 'user' ? 'bg-stone-800 text-stone-200' : 'bg-stone-950 border border-stone-800 text-stone-300'}`}>
+//                 {msg.content}
+//               </div>
+              
+//               {/* Render the glowing precedent cards if Exa found any */}
+//               {msg.precedents && (
+//                 <div className="mt-4 grid gap-3 w-full max-w-[85%]">
+//                   {msg.precedents.map((prec, i) => (
+//                     <div key={i} className="bg-stone-900 border border-amber-500/30 p-4 rounded-xl flex justify-between items-center group hover:border-amber-500 transition-all">
+//                       <div>
+//                         <h4 className="font-bold text-amber-400">{prec.title}</h4>
+//                         <p className="text-xs text-stone-500 mt-1 uppercase tracking-wider">{prec.code} • {prec.relevance} Match</p>
+//                       </div>
+//                       <button 
+//                         onClick={() => handlePin(prec)}
+//                         className="p-2 bg-stone-950 border border-stone-800 rounded-lg hover:text-amber-500 transition-colors"
+//                       >
+//                         {justPinned === prec.title ? <BookmarkCheck className="w-5 h-5 text-emerald-500" /> : <BookmarkPlus className="w-5 h-5 text-stone-400" />}
+//                       </button>
+//                     </div>
+//                   ))}
+//                 </div>
+//               )}
+//             </div>
+//           ))}
+//           {isSearching && <div className="text-amber-500 text-sm animate-pulse flex items-center gap-2"><Database className="w-4 h-4" /> Scraping live web parameters...</div>}
+//         </div>
+
+//         <form onSubmit={handleSendMessage} className="p-4 bg-stone-950 border-t border-stone-800 flex gap-2">
+//           <input 
+//             type="text" 
+//             value={input}
+//             onChange={(e) => setInput(e.target.value)}
+//             className="flex-1 bg-stone-900 border border-stone-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-amber-500/50"
+//             placeholder="Search Exa database for case laws..."
+//           />
+//           <button type="submit" className="bg-amber-600 hover:bg-amber-500 text-stone-950 px-6 font-bold rounded-lg transition-colors">
+//             Query
+//           </button>
+//         </form>
+//       </div>
+
+//       {/* RIGHT SIDE: Convex Real-Time Pinboard */}
+//       <div className="w-80 bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+//         <div className="p-4 border-b border-stone-800 bg-stone-950">
+//           <h2 className="font-bold text-emerald-500 tracking-widest uppercase text-sm flex items-center gap-2">
+//             <Scale className="w-4 h-4" /> Case Pinboard
+//           </h2>
+//           <p className="text-[10px] text-stone-500 mt-1 uppercase">Live Convex Sync</p>
+//         </div>
+        
+//         <div className="flex-1 overflow-y-auto p-4 space-y-3">
+//           {pinnedCases === undefined ? (
+//             <div className="text-stone-500 text-sm animate-pulse text-center mt-10">Connecting to Vault...</div>
+//           ) : pinnedCases.length === 0 ? (
+//             <div className="text-stone-600 text-sm text-center mt-10">No precedents pinned yet.</div>
+//           ) : (
+//             pinnedCases.map((pin) => (
+//               <div key={pin._id} className="bg-stone-950 border border-stone-800 p-3 rounded-lg shadow-sm">
+//                 <h4 className="font-bold text-sm text-stone-200">{pin.caseTitle}</h4>
+//                 <div className="flex items-center gap-2 mt-2">
+//                   <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded uppercase font-bold">{pin.relevance}</span>
+//                   <span className="text-[10px] text-stone-500 uppercase">{pin.code}</span>
+//                 </div>
+//               </div>
+//             ))
+//           )}
+//         </div>
+//       </div>
+
+//     </div>
+//   );
+// }
+
+
+
+"use client";
+
+import { useState, useRef } from 'react';
+import Link from 'next/link';
+import { Search, Scale, BookmarkPlus, BookmarkCheck, Database, Paperclip, Download, ChevronDown, ChevronUp } from 'lucide-react';
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api"; 
+
+export default function LawyerTerminal() {
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [uploadedFile, setUploadedFile] = useState(null);
-
-  const [history] = useState([
-    { id: 1, title: 'Eviction Notice - Rent Control' },
-    { id: 2, title: 'Corporate Embezzlement 420 IPC' }
+  const [messages, setMessages] = useState([
+    { role: 'ai', content: 'Aura Neural Search Online. Enter a legal query to scrape Indian case law precedents.' }
   ]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [expandedCard, setExpandedCard] = useState(null); // Tracks which card is clicked open
+  
+  const fileInputRef = useRef(null);
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setUploadedFile(file.name);
-      setMessages([...messages, { role: 'user', content: `[Attached Document: ${file.name}] Please analyze this.` }]);
+  // CONVEX REAL-TIME HOOKS
+  const pinnedCases = useQuery(api.precedents.getPinned, { lawyerId: "Lawyer_001" });
+  const pinCaseMutation = useMutation(api.precedents.pinCase);
+  const [justPinned, setJustPinned] = useState(null); 
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    const currentQuery = input; 
+    setMessages(prev => [...prev, { role: 'user', content: currentQuery }]);
+    setInput('');
+    setIsSearching(true);
+
+    try {
+      const response = await fetch('/api/lawyer-search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: currentQuery }),
+      });
+
+      const data = await response.json();
+      setMessages(prev => [...prev, { role: 'ai', content: data.content, precedents: data.precedents }]);
+    } catch (error) {
+      setMessages(prev => [...prev, { role: 'ai', content: "Neural search failed. Please verify API connections." }]);
+    } finally {
+      setIsSearching(false);
     }
   };
 
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (!input.trim() && !uploadedFile) return;
-
-    const newMessages = [...messages, { role: 'user', content: input }];
-    setMessages(newMessages);
-    setInput('');
-    setUploadedFile(null);
-
-    setTimeout(() => {
-      const aiResponse = {
-        role: 'ai',
-        content: "I have analyzed the query. Here are the most relevant precedents:",
-        precedents: [
-          { title: "State vs. Sharma (2018)", relevance: "94%", code: "IPC 420" },
-          { title: "Mehta Properties vs. Union (2021)", relevance: "88%", code: "Rent Control Act Sec 14" }
-        ]
-      };
-      setMessages((prev) => [...prev, aiResponse]);
-    }, 1000);
+  const handlePin = async (e, prec) => {
+    e.stopPropagation(); // Stops the card from expanding when clicking the pin button
+    setJustPinned(prec.title);
+    await pinCaseMutation({
+      lawyerId: "Lawyer_001",
+      caseTitle: prec.title,
+      relevance: prec.relevance || "High",
+      code: prec.code || "Legal Precedent",
+      datePinned: Date.now(),
+    });
+    setTimeout(() => setJustPinned(null), 2000);
   };
 
-  const handleGenerateBrief = () => {
-    alert("Generating PDF Brief from the current chat context...");
+  // Hackathon Trick: Generate a downloadable text file of the case brief!
+  const handleDownloadBrief = () => {
+    const briefContent = messages
+      .filter(m => m.precedents)
+      .map(m => m.precedents.map(p => `CASE: ${p.title}\nACT: ${p.code}\nRULING: ${p.details || "Details not available."}\n---\n`).join('\n'))
+      .join('\n');
+    
+    if (!briefContent) return alert("No precedents to download yet!");
+
+    const blob = new Blob([briefContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Aura_Legal_Brief.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   return (
-    <div className="flex h-screen bg-stone-950 font-sans">
+    <div className="min-h-screen bg-stone-950 text-stone-300 p-6 flex gap-6 font-sans">
+      
+      {/* LEFT SIDE: Exa Neural Search Terminal */}
+      <div className="flex-1 flex flex-col bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden shadow-2xl">
+        <div className="p-4 border-b border-stone-800 bg-stone-950 flex items-center justify-between">
+          <h2 className="font-bold text-amber-500 tracking-widest uppercase text-sm flex items-center gap-2">
+            <Search className="w-4 h-4" /> Neural Precedent Search
+          </h2>
+          <div className="flex items-center gap-4">
+            {/* DOWNLOAD BUTTON */}
+            <button onClick={handleDownloadBrief} className="text-xs flex items-center gap-1 bg-stone-800 hover:bg-stone-700 px-3 py-1.5 rounded-md text-stone-300 transition-colors">
+              <Download className="w-3 h-3" /> Export Brief
+            </button>
+            <Link href="/lawyer-dashboard" className="text-xs text-stone-500 hover:text-amber-500">Exit Terminal</Link>
+          </div>
+        </div>
 
-      {/* LEFT SIDEBAR */}
-      <div className="w-72 border-r border-stone-800 hidden md:flex flex-col bg-stone-900">
-        {/* Sidebar Header */}
-        <div className="p-5 border-b border-stone-800">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
-              <Scale className="w-4 h-4 text-amber-500" />
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          {messages.map((msg, idx) => (
+            <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+              <div className={`max-w-[85%] p-4 rounded-xl text-sm ${msg.role === 'user' ? 'bg-stone-800 text-stone-200' : 'bg-stone-950 border border-stone-800 text-stone-300'}`}>
+                {msg.content}
+              </div>
+              
+              {msg.precedents && (
+                <div className="mt-4 grid gap-3 w-full max-w-[85%]">
+                  {msg.precedents.map((prec, i) => (
+                    // CLICK TO EXPAND LOGIC
+                    <div 
+                      key={i} 
+                      onClick={() => setExpandedCard(expandedCard === prec.title ? null : prec.title)}
+                      className="bg-stone-900 border border-amber-500/30 rounded-xl cursor-pointer hover:border-amber-500 transition-all overflow-hidden"
+                    >
+                      <div className="p-4 flex justify-between items-center">
+                        <div>
+                          <h4 className="font-bold text-amber-400">{prec.title}</h4>
+                          <p className="text-xs text-stone-500 mt-1 uppercase tracking-wider">{prec.code} • {prec.relevance} Match</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <button onClick={(e) => handlePin(e, prec)} className="p-2 bg-stone-950 border border-stone-800 rounded-lg hover:text-amber-500 transition-colors">
+                            {justPinned === prec.title ? <BookmarkCheck className="w-5 h-5 text-emerald-500" /> : <BookmarkPlus className="w-5 h-5 text-stone-400" />}
+                          </button>
+                          {expandedCard === prec.title ? <ChevronUp className="w-5 h-5 text-stone-500" /> : <ChevronDown className="w-5 h-5 text-stone-500" />}
+                        </div>
+                      </div>
+                      
+                      {/* EXPANDED DETAILS SECTION */}
+                      {expandedCard === prec.title && (
+                        <div className="px-4 pb-4 pt-2 border-t border-stone-800 bg-stone-950/50">
+                          <p className="text-sm text-stone-400 leading-relaxed">{prec.details || "Generating deep-dive analytics for this precedent..."}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            <span className="font-semibold text-sm tracking-wide uppercase text-amber-500">Aura Legal</span>
-          </div>
+          ))}
+          {isSearching && <div className="text-amber-500 text-sm animate-pulse flex items-center gap-2"><Database className="w-4 h-4" /> Scraping live web parameters...</div>}
         </div>
 
-        {/* History */}
-        <div className="p-4 flex-1 overflow-y-auto">
-          <p className="text-[11px] font-medium uppercase tracking-widest text-stone-400 mb-3">Research History</p>
-          <div className="space-y-1.5">
-            {history.map((session) => (
-              <button
-                key={session.id}
-                className="w-full text-left px-3 py-2.5 rounded-lg text-sm truncate text-stone-300 transition-all duration-200 hover:bg-stone-800 hover:shadow-[0_0_15px_rgba(245,158,11,0.08)] group"
-              >
-                <MessageSquare className="inline w-3.5 h-3.5 mr-2.5 text-stone-500 group-hover:text-amber-500 transition-colors" />
-                {session.title}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Sidebar Footer */}
-        <div className="p-4 border-t border-stone-800">
-          <p className="text-[10px] text-stone-500 text-center tracking-wider">AURA LEGAL AI • v2.0</p>
-        </div>
+        <form onSubmit={handleSendMessage} className="p-4 bg-stone-950 border-t border-stone-800 flex gap-2 items-center">
+          {/* UPLOAD BUTTON */}
+          <input type="file" ref={fileInputRef} className="hidden" accept=".pdf,.doc,.docx" />
+          <button type="button" onClick={() => fileInputRef.current.click()} className="p-3 bg-stone-900 hover:bg-stone-800 border border-stone-800 rounded-lg text-stone-400 hover:text-amber-500 transition-colors">
+            <Paperclip className="w-5 h-5" />
+          </button>
+          
+          <input 
+            type="text" 
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="flex-1 bg-stone-900 border border-stone-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-amber-500/50"
+            placeholder="Search Exa database for case laws..."
+          />
+          <button type="submit" className="bg-amber-600 hover:bg-amber-500 text-stone-950 px-6 py-3 font-bold rounded-lg transition-colors">
+            Query
+          </button>
+        </form>
       </div>
 
-      {/* MAIN AREA */}
-      <div className="flex-1 flex flex-col relative">
-
-        {/* Header */}
-        <header className="px-6 py-4 border-b border-stone-800 flex justify-between items-center bg-stone-950/80 backdrop-blur-xl">
-          <div>
-            <h1 className="font-bold text-lg tracking-tight text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
-              Aura Legal Terminal
-            </h1>
-            <p className="text-[11px] text-stone-400 mt-0.5">AI-Powered Precedent Research</p>
-          </div>
-          <button
-            onClick={handleGenerateBrief}
-            className="flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-stone-950 px-5 py-2.5 rounded-lg font-bold text-sm transition-all duration-300 hover:shadow-[0_0_25px_rgba(245,158,11,0.35)]"
-          >
-            <Download className="w-4 h-4" /> Generate Brief
-          </button>
-        </header>
-
-        {/* Chat Feed */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-5">
-          {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center">
-              <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-5">
-                <Scale className="w-8 h-8 text-amber-500/60" />
-              </div>
-              <p className="text-stone-400 text-sm max-w-md">
-                Upload a document or type a query to begin precedent search.
-              </p>
-            </div>
+      {/* RIGHT SIDE: Convex Real-Time Pinboard (Remains Exactly the Same) */}
+      <div className="w-80 bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+        <div className="p-4 border-b border-stone-800 bg-stone-950">
+          <h2 className="font-bold text-emerald-500 tracking-widest uppercase text-sm flex items-center gap-2">
+            <Scale className="w-4 h-4" /> Case Pinboard
+          </h2>
+          <p className="text-[10px] text-stone-500 mt-1 uppercase">Live Convex Sync</p>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          {pinnedCases === undefined ? (
+            <div className="text-stone-500 text-sm animate-pulse text-center mt-10">Connecting to Vault...</div>
+          ) : pinnedCases.length === 0 ? (
+            <div className="text-stone-600 text-sm text-center mt-10">No precedents pinned yet.</div>
           ) : (
-            messages.map((msg, index) => (
-              <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div
-                  className={`max-w-2xl p-4 rounded-xl ${
-                    msg.role === 'user'
-                      ? 'bg-stone-800 text-stone-200'
-                      : 'bg-stone-900 border border-stone-700 text-stone-300'
-                  }`}
-                >
-                  <p className="text-sm leading-relaxed">{msg.content}</p>
-
-                  {msg.precedents && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                      {msg.precedents.map((prec, i) => (
-                        <div
-                          key={i}
-                          className="bg-stone-950 p-4 rounded-lg border border-amber-500/20 transition-all duration-300 hover:border-amber-500/50 hover:shadow-[0_0_15px_rgba(245,158,11,0.15)]"
-                        >
-                          <div className="flex items-start justify-between gap-2">
-                            <h4 className="font-semibold text-sm text-amber-500">{prec.title}</h4>
-                            <span className="text-[10px] font-bold bg-amber-500/15 text-amber-500 px-2 py-0.5 rounded-full whitespace-nowrap">
-                              {prec.relevance}
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-stone-400 mt-2 font-mono tracking-wide">
-                            § {prec.code}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+            pinnedCases.map((pin) => (
+              <div key={pin._id} className="bg-stone-950 border border-stone-800 p-3 rounded-lg shadow-sm">
+                <h4 className="font-bold text-sm text-stone-200">{pin.caseTitle}</h4>
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded uppercase font-bold">{pin.relevance}</span>
+                  <span className="text-[10px] text-stone-500 uppercase">{pin.code}</span>
                 </div>
               </div>
             ))
           )}
         </div>
-
-        {/* Input Zone */}
-        <div className="p-4 border-t border-stone-800 bg-stone-950/60 backdrop-blur-xl">
-          <form
-            onSubmit={handleSendMessage}
-            className="max-w-4xl mx-auto relative flex items-end gap-2 bg-stone-900/80 backdrop-blur-md p-2 rounded-xl border border-stone-700 transition-all duration-300 focus-within:border-amber-500/40 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.12)]"
-          >
-            <label className="cursor-pointer p-3 text-stone-400 hover:text-amber-500 transition-colors duration-200">
-              <Upload className="w-5 h-5" />
-              <input type="file" className="hidden" onChange={handleFileUpload} />
-            </label>
-
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask a legal question or cross-examine precedents..."
-              className="flex-1 bg-transparent text-stone-200 p-2 focus:outline-none resize-none min-h-[44px] max-h-32 placeholder:text-stone-500 text-sm"
-              rows={1}
-            />
-
-            <button
-              type="submit"
-              className="p-3 bg-amber-600 hover:bg-amber-500 text-stone-950 rounded-lg transition-all duration-300 disabled:opacity-30 disabled:hover:bg-amber-600 hover:shadow-[0_0_15px_rgba(245,158,11,0.3)]"
-              disabled={!input.trim() && !uploadedFile}
-            >
-              <Send className="w-5 h-5" />
-            </button>
-          </form>
-          {uploadedFile && (
-            <div className="max-w-4xl mx-auto mt-2 text-xs text-amber-500 flex items-center gap-1.5">
-              <FileText className="w-3 h-3" /> Attached: {uploadedFile}
-            </div>
-          )}
-        </div>
       </div>
+
     </div>
   );
 }
