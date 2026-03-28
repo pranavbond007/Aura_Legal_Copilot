@@ -9,7 +9,7 @@ export const metadata = {
   title: "Aura Legal Copilot",
   description: "AI-Powered Legal Strategy and FIR Drafting",
 };
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
       {/* We moved all the background and text colors right here! */}
