@@ -1,10 +1,31 @@
 
 import Link from 'next/link';
-import { getUserCases } from '@/adapters/database';
+
 import { Shield, FileText, Clock, ChevronRight, Plus, User, LogOut, Scale, Building2 } from 'lucide-react';
 
 export default async function CitizenDashboard() {
-  const activeCases = await getUserCases(1);
+  // 🚨 HACKATHON MOCK DATA BYPASS 🚨
+  // Vercel can't read SQLite, so we feed the UI this realistic data instead!
+  const activeCases = [
+    {
+      id: 1,
+      caseNumber: "CAS-2026-881",
+      status: "Pending",
+      title: "Unfair Eviction Notice",
+      description: "Landlord sent a 3-day notice without citing rent control violations.",
+      filedDate: "2026-03-28T09:45:00Z",
+      lastUpdated: "2026-03-28T09:45:00Z"
+    },
+    {
+      id: 2,
+      caseNumber: "CAS-2026-882",
+      status: "AI Scanned",
+      title: "Workplace Harassment Claim",
+      description: "Initial FIR drafted regarding unpaid overtime and verbal abuse.",
+      filedDate: "2026-03-27T10:00:00Z",
+      lastUpdated: "2026-03-27T14:20:00Z"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-slate-50">
